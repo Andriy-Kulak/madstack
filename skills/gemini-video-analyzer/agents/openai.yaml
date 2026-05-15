@@ -1,0 +1,7 @@
+interface:
+  display_name: "Gemini Video Analyzer"
+  short_description: "General video analysis with Gemini"
+  default_prompt: "Use gemini-video-analyzer to describe this video in detail with timestamps."
+
+policy:
+  allow_implicit_invocation: true

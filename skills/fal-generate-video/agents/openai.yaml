@@ -1,0 +1,7 @@
+interface:
+  display_name: "fal Generate Video"
+  short_description: "Generate short ad and social videos with fal.ai"
+  default_prompt: "Use fal-generate-video to generate or iterate on this video."
+
+policy:
+  allow_implicit_invocation: true

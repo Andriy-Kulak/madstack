@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+HOST="all"
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --host)
+      HOST="${2:?Missing value for --host}"
+      shift 2
+      ;;
+    --host=*)
+      HOST="${1#--host=}"
+      shift
+      ;;
+    codex|claude|all)
+      HOST="$1"
+      shift
+      ;;
+    -h|--help)
+      echo "Usage: ./setup [--host codex|claude|all]"
+      exit 0
+      ;;
+    *)
+      echo "Unknown argument: $1" >&2
+      exit 1
+      ;;
+  esac
+done
+
+install_skills() {
+  local target_root="$1"
+  mkdir -p "$target_root"
+
+  local linked=()
+  for skill_dir in "$ROOT"/skills/*; do
+    [ -d "$skill_dir" ] || continue
+    [ -f "$skill_dir/SKILL.md" ] || continue
+
+    local skill_name
+    skill_name="$(basename "$skill_dir")"
+    local target="$target_root/$skill_name"
+
+    if [ -e "$target" ] && [ ! -L "$target" ]; then
+      echo "Refusing to overwrite non-symlink: $target" >&2
+      continue
+    fi
+
+    ln -snf "$skill_dir" "$target"
+    linked+=("$skill_name")
+  done
+
+  echo "Installed to $target_root: ${linked[*]}"
+}
+
+case "$HOST" in
+  codex)
+    install_skills "$HOME/.codex/skills"
+    ;;
+  claude)
+    install_skills "$HOME/.claude/skills"
+    ;;
+  all)
+    install_skills "$HOME/.codex/skills"
+    install_skills "$HOME/.claude/skills"
+    ;;
+  *)
+    echo "Unknown host: $HOST (expected codex, claude, all)" >&2
+    exit 1
+    ;;
+esac
+
+echo "Done. Run: bun run check"

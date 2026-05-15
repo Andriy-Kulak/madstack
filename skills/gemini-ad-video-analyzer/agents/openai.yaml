@@ -1,0 +1,7 @@
+interface:
+  display_name: "Gemini Ad Video Analyzer"
+  short_description: "Paid-social video ad teardown with Gemini"
+  default_prompt: "Use gemini-ad-video-analyzer to analyze this video ad."
+
+policy:
+  allow_implicit_invocation: true
