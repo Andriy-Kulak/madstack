@@ -9,6 +9,7 @@ madstack is a Marketing Ad & Growth Stack of Skills. Use it for ad creative anal
 - Prefer TypeScript for reusable scripts, API helpers, validators, and transformations.
 - Shell commands are fine when they are the clearest interface to an installed CLI, agent tool, or short setup step.
 - Keep the repo portable. Do not reference private local skill paths such as a user's home-directory Codex skill install.
+- When opening pull requests, create regular ready-for-review PRs by default. Do not create draft PRs unless the user explicitly asks for a draft.
 
 ## Skill Selection
 
