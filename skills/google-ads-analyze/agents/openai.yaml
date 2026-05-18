@@ -1,0 +1,7 @@
+interface:
+  display_name: "Google Ads Analyze"
+  short_description: "Analyze Google Ads accounts through the API"
+  default_prompt: "Use google-ads-analyze to inspect this Google Ads account."
+
+policy:
+  allow_implicit_invocation: true

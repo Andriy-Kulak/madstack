@@ -1,4 +1,4 @@
-#!/usr/bin/env bun
+#!/usr/bin/env tsx
 import { existsSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { GoogleGenAI, createPartFromUri, createUserContent } from "@google/genai";
@@ -31,7 +31,7 @@ const mimeByExt: Record<string, string> = {
 };
 
 function usage(): never {
-  console.error(`Usage: bun run skills/gemini-video-analyzer/scripts/analyze-video.ts <video-path-or-youtube-url> [options]
+  console.error(`Usage: npm run analyze-video -- <video-path-or-youtube-url> [options]
 
 Options:
   --mode general|ad

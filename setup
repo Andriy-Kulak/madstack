@@ -71,4 +71,4 @@ case "$HOST" in
     ;;
 esac
 
-echo "Done. Run: bun run check"
+echo "Done. Run: npm run check"

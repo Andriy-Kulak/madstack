@@ -11,27 +11,21 @@ Use this skill when the user gives a video and wants an ad-specific creative tea
 
 - Use `GEMINI_API_KEY` or `GOOGLE_API_KEY`; never write API keys into the skill or project files.
 - Use the shared helper from `gemini-video-analyzer` in ad mode.
-- If dependencies are missing, ask the user to run `bun install` in the madstack repo.
+- If dependencies are missing, ask the user to run `npm install` in the madstack repo.
 
 From the madstack repo:
 
 ```bash
-bun run skills/gemini-video-analyzer/scripts/analyze-video.ts /path/to/video.mp4 --mode ad
+npm run analyze-video -- /path/to/video.mp4 --mode ad
 ```
 
 For public YouTube videos:
 
 ```bash
-bun run skills/gemini-video-analyzer/scripts/analyze-video.ts "https://www.youtube.com/watch?v=..." --mode ad
+npm run analyze-video -- "https://www.youtube.com/watch?v=..." --mode ad
 ```
 
-When installed globally, run the helper from the sibling skill directory:
-
-```bash
-bun run ~/.codex/skills/gemini-video-analyzer/scripts/analyze-video.ts /path/to/video.mp4 --mode ad
-```
-
-Use `~/.claude/skills/gemini-video-analyzer/scripts/analyze-video.ts` for Claude Code installs.
+Run helper commands from the madstack repo root so npm can find the project dependencies.
 
 ## Workflow
 
