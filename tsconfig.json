@@ -6,7 +6,7 @@
     "strict": true,
     "skipLibCheck": true,
     "noEmit": true,
-    "types": ["bun-types"]
+    "types": ["node"]
   },
   "include": ["scripts/**/*.ts", "skills/**/*.ts"]
 }

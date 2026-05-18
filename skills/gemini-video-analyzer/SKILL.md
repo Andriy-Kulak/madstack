@@ -11,27 +11,21 @@ Use this skill when the user gives a video and wants Gemini to inspect the actua
 
 - Use `GEMINI_API_KEY` or `GOOGLE_API_KEY`; never write API keys into the skill or project files.
 - Prefer the bundled TypeScript helper so the upload and Gemini request are reproducible.
-- If dependencies are missing, ask the user to run `bun install` in the madstack repo.
+- If dependencies are missing, ask the user to run `npm install` in the madstack repo.
 
 From the madstack repo:
 
 ```bash
-bun run skills/gemini-video-analyzer/scripts/analyze-video.ts /path/to/video.mp4 --mode general
+npm run analyze-video -- /path/to/video.mp4 --mode general
 ```
 
 For public YouTube videos:
 
 ```bash
-bun run skills/gemini-video-analyzer/scripts/analyze-video.ts "https://www.youtube.com/watch?v=..." --mode general
+npm run analyze-video -- "https://www.youtube.com/watch?v=..." --mode general
 ```
 
-When installed globally, run the same helper from the installed skill directory:
-
-```bash
-bun run ~/.codex/skills/gemini-video-analyzer/scripts/analyze-video.ts /path/to/video.mp4 --mode general
-```
-
-Use `~/.claude/skills/gemini-video-analyzer/scripts/analyze-video.ts` for Claude Code installs.
+Run helper commands from the madstack repo root so npm can find the project dependencies.
 
 ## Workflow
 
