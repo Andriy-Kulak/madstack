@@ -110,6 +110,12 @@ type DownloadedAd = {
   errors: string[];
 };
 
+type MediaSources = {
+  sourceVideoUrl: string | null;
+  sourceImageUrl: string | null;
+  sourcePreviewUrl: string | null;
+};
+
 type ArchiveOptions = {
   url: string;
   out: string | null;
@@ -139,6 +145,10 @@ const DEFAULT_CHROME_PATHS = [
   "/usr/bin/chromium",
   "/usr/bin/chromium-browser",
 ];
+
+const VIDEO_URL_KEYS = ["video_hd_url", "video_sd_url"];
+const IMAGE_URL_KEYS = ["original_image_url", "resized_image_url", "watermarked_resized_image_url"];
+const PREVIEW_URL_KEYS = ["video_preview_image_url"];
 
 function usage(exitCode = 1): never {
   const stream = exitCode === 0 ? process.stdout : process.stderr;
@@ -450,6 +460,10 @@ function uniqueAds(ads: NormalizedAd[]): NormalizedAd[] {
   return out;
 }
 
+function uniqueAdCount(ads: NormalizedAd[]): number {
+  return new Set(ads.map((ad) => ad.ad_archive_id)).size;
+}
+
 function paginationVariables(initialVariables: JsonObject, cursor: string): JsonObject {
   return {
     activeStatus: initialVariables.activeStatus,
@@ -602,7 +616,7 @@ async function scrapeWithBrowserFallback(options: {
     }
 
     for (let i = 0; i < 20; i += 1) {
-      const uniqueCount = uniqueAds(ads).length;
+      const uniqueCount = uniqueAdCount(ads);
       if (uniqueCount >= options.maxAds) break;
       if (options.declaredCount !== null && uniqueCount >= options.declaredCount) break;
 
@@ -638,8 +652,8 @@ async function scrapeUrl(sourceUrl: string, requestedLimit: number | "all"): Pro
     initialVariables &&
     pageInfo?.has_next_page === true &&
     pageInfo.end_cursor &&
-    allAds.length < maxAds &&
-    (declaredCount === null || allAds.length < declaredCount)
+    uniqueAdCount(allAds) < maxAds &&
+    (declaredCount === null || uniqueAdCount(allAds) < declaredCount)
   ) {
     paginationAttempted = true;
     try {
@@ -739,6 +753,15 @@ function firstMediaUrl(records: Array<Record<string, unknown>>, keys: string[]):
   return null;
 }
 
+function mediaSourcesForAd(ad: NormalizedAd): MediaSources {
+  const mediaRecords = [...ad.images, ...ad.videos, ...ad.cards];
+  return {
+    sourceVideoUrl: firstMediaUrl(mediaRecords, VIDEO_URL_KEYS),
+    sourceImageUrl: firstMediaUrl(mediaRecords, IMAGE_URL_KEYS),
+    sourcePreviewUrl: firstMediaUrl(mediaRecords, PREVIEW_URL_KEYS),
+  };
+}
+
 function extensionFromUrl(url: string, fallback: string): string {
   try {
     const ext = path.extname(new URL(url).pathname).toLowerCase();
@@ -808,9 +831,7 @@ async function downloadMediaFromScrape(input: ScrapeResult, sourceFile: string, 
 
   await runWithConcurrency(input.ads, concurrency, async (ad, index) => {
     const prefix = `${String(index + 1).padStart(3, "0")}_${ad.ad_archive_id}`;
-    const sourceVideoUrl = firstMediaUrl(ad.videos, ["video_hd_url", "video_sd_url"]);
-    const sourceImageUrl = firstMediaUrl(ad.images, ["original_image_url", "resized_image_url", "watermarked_resized_image_url"]);
-    const sourcePreviewUrl = firstMediaUrl(ad.videos, ["video_preview_image_url"]);
+    const { sourceVideoUrl, sourceImageUrl, sourcePreviewUrl } = mediaSourcesForAd(ad);
     const videoFile = sourceVideoUrl ? path.join(videosDir, `${prefix}${extensionFromUrl(sourceVideoUrl, ".mp4")}`) : null;
     const imageFile = sourceImageUrl ? path.join(imagesDir, `${prefix}${extensionFromUrl(sourceImageUrl, ".jpg")}`) : null;
     const previewFile = sourcePreviewUrl ? path.join(previewsDir, `${prefix}${extensionFromUrl(sourcePreviewUrl, ".jpg")}`) : null;
@@ -1019,6 +1040,8 @@ function runSelfTest() {
   assert(ads[0]?.videos[0]?.video_hd_url, "video fixture should preserve video_hd_url");
   assert(ads[1]?.images[0]?.original_image_url, "image fixture should preserve original_image_url");
   assert((ads[2]?.cards.length ?? 0) === 1, "carousel fixture should preserve cards");
+  assert(mediaSourcesForAd(ads[2] ?? ads[0])?.sourceImageUrl === "https://image.example/card.jpg", "carousel fixture should use card image as media source");
+  assert(uniqueAdCount([...ads, ads[0] as NormalizedAd]) === ads.length, "unique ad count should ignore duplicate rows");
   assert(ads[0]?.body_text?.includes("Sleep better"), "text fixture should preserve body text");
   assert(extractSearchConnection(empty).count === 0, "empty fixture should parse count 0");
 
