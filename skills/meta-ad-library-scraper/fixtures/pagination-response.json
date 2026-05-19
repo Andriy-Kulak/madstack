@@ -1,0 +1,35 @@
+{
+  "data": {
+    "ad_library_main": {
+      "search_results_connection": {
+        "count": 4,
+        "edges": [
+          {
+            "node": {
+              "collated_results": [
+                {
+                  "ad_archive_id": "4",
+                  "is_active": true,
+                  "page_id": "123",
+                  "publisher_platform": ["THREADS"],
+                  "snapshot": {
+                    "page_name": "Fixture Brand",
+                    "display_format": "TEXT",
+                    "body": { "text": "Pagination ad" },
+                    "images": [],
+                    "videos": [],
+                    "cards": []
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "page_info": {
+          "end_cursor": null,
+          "has_next_page": false
+        }
+      }
+    }
+  }
+}

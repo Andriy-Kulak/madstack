@@ -13,6 +13,7 @@ The repo starts Codex-first and stays compatible with Claude Code. `AGENTS.md` i
 | `gemini-video-analyzer` | Gemini | General video summaries, transcripts, scene breakdowns |
 | `gemini-ad-video-analyzer` | Gemini | Ad teardowns, hooks, angles, CTAs, steal-worthy patterns |
 | `fal-generate-video` | fal.ai | Text-to-video, image-to-video, reference-to-video ad/social clips |
+| `meta-ad-library-scraper` | Meta Ad Library | Public ad IDs, copy, formats, image/video URLs, CTAs, landing URLs |
 | `google-ads-analyze` | Google Ads API | Account, campaign, and performance analysis from Google Ads API data |
 
 ## Install
@@ -64,6 +65,22 @@ GOOGLE_ADS_CUSTOMER_ID=
 ```
 
 Never put real API keys in `README.md`, `AGENTS.md`, `CLAUDE.md`, `SKILL.md`, scripts, examples, commits, issues, or chat transcripts.
+
+## Meta Ad Library Scraping
+
+Use `meta-ad-library-scraper` for public competitor creative research from a Meta Ads Library URL:
+
+```bash
+npm run meta-ads -- scrape-url "https://www.facebook.com/ads/library/?..." --limit all --json
+```
+
+To create an inspectable local archive with downloaded videos/static images, a manifest, and an HTML gallery:
+
+```bash
+npm run meta-ads -- archive-url "https://www.facebook.com/ads/library/?..." --out meta-files/brand
+```
+
+The scraper returns public metadata only: ad library IDs, copy, titles, CTAs, landing URLs, formats, image/video URLs, platforms, page metadata, and run dates when Meta exposes them. It uses `playwright-core` with local Chrome/Chromium as a browser fallback when Meta rejects direct pagination. If more than 100 ads are found, choose a download amount with `--download-limit N` or explicitly pass `--yes`. It does not provide exact spend, exact impressions, targeting, or private ad account data.
 
 ## Google Ads API Setup
 

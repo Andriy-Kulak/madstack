@@ -1,0 +1,7 @@
+interface:
+  display_name: "Meta Ad Library Scraper"
+  short_description: "Scrape and archive Meta Ad Library creatives into a local gallery"
+  default_prompt: "Use meta-ad-library-scraper to archive this Meta Ads Library URL into JSON, downloaded media, manifest, and gallery files."
+
+policy:
+  allow_implicit_invocation: true
