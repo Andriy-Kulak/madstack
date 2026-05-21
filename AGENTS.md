@@ -5,7 +5,7 @@ madstack is a Marketing Ad & Growth Stack of Skills. Use it for ad creative anal
 ## Canonical Rules
 
 - Treat this file as the canonical agent instruction file for the repo.
-- Prefer the provider-specific skills in `skills/` when the user asks for video analysis, ad teardown, video generation, or Google Ads API analysis.
+- Prefer the provider-specific skills in `skills/` when the user asks for video analysis, ad teardown, video generation, Meta Ad Library scraping, or Google Ads API analysis.
 - Prefer TypeScript for reusable scripts, API helpers, validators, and transformations.
 - Shell commands are fine when they are the clearest interface to an installed CLI, agent tool, or short setup step.
 - Keep the repo portable. Do not reference private local skill paths such as a user's home-directory Codex skill install.
@@ -18,6 +18,7 @@ madstack is a Marketing Ad & Growth Stack of Skills. Use it for ad creative anal
 | General video summary, scene breakdown, transcript, or visual inspection | `gemini-video-analyzer` |
 | Paid-social teardown, UGC review, hook/angle/CTA analysis, or steal-worthy patterns | `gemini-ad-video-analyzer` |
 | Generate or iterate on short social/ad videos with fal.ai | `fal-generate-video` |
+| Public Meta Ads Library URL scraping for ad IDs, copy, image/video URLs, formats, CTAs, and landing URLs | `meta-ad-library-scraper` |
 | Google Ads account, campaign, or performance analysis through the Google Ads API | `google-ads-analyze` |
 
 ## Secret Safety

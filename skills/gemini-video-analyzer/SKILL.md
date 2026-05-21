@@ -12,6 +12,7 @@ Use this skill when the user gives a video and wants Gemini to inspect the actua
 - Use `GEMINI_API_KEY` or `GOOGLE_API_KEY`; never write API keys into the skill or project files.
 - Prefer the bundled TypeScript helper so the upload and Gemini request are reproducible.
 - If dependencies are missing, ask the user to run `npm install` in the madstack repo.
+- The helper reads `.env` and `.env.local` from the madstack repo root, plus exported shell env vars.
 
 From the madstack repo:
 

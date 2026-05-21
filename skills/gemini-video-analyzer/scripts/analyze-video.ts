@@ -1,5 +1,5 @@
 #!/usr/bin/env tsx
-import { existsSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { GoogleGenAI, createPartFromUri, createUserContent } from "@google/genai";
 
@@ -16,6 +16,8 @@ interface Options {
   save?: string;
 }
 
+type Env = Record<string, string>;
+
 const mimeByExt: Record<string, string> = {
   ".mp4": "video/mp4",
   ".mpeg": "video/mpeg",
@@ -29,6 +31,39 @@ const mimeByExt: Record<string, string> = {
   ".3gpp": "video/3gpp",
   ".3gp": "video/3gpp",
 };
+
+function parseEnvFile(filePath: string): Env {
+  if (!existsSync(filePath)) return {};
+
+  const env: Env = {};
+  for (const rawLine of readFileSync(filePath, "utf8").split(/\r?\n/)) {
+    const line = rawLine.trim();
+    if (!line || line.startsWith("#") || !line.includes("=")) continue;
+
+    const [rawKey, ...rest] = line.split("=");
+    const key = rawKey.trim();
+    let value = rest.join("=").trim();
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+    env[key] = value;
+  }
+
+  return env;
+}
+
+function loadEnv(): Env {
+  return {
+    ...parseEnvFile(path.join(process.cwd(), ".env")),
+    ...parseEnvFile(path.join(process.cwd(), ".env.local")),
+    ...Object.fromEntries(
+      Object.entries(process.env).filter((entry): entry is [string, string] => typeof entry[1] === "string"),
+    ),
+  };
+}
 
 function usage(): never {
   console.error(`Usage: npm run analyze-video -- <video-path-or-youtube-url> [options]
@@ -157,7 +192,8 @@ function textFromResponse(response: unknown): string {
 
 async function main() {
   const opts = parseArgs(process.argv.slice(2));
-  const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+  const env = loadEnv();
+  const apiKey = env.GEMINI_API_KEY || env.GOOGLE_API_KEY;
   if (!apiKey) {
     throw new Error("Missing GEMINI_API_KEY or GOOGLE_API_KEY. Configure it locally; do not paste keys into chat or repo files.");
   }

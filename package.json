@@ -6,13 +6,19 @@
   "description": "Marketing Ad & Growth Stack of Skills",
   "scripts": {
     "check": "tsx scripts/check.ts",
+    "doctor": "tsx scripts/doctor.ts",
     "typecheck": "tsc --noEmit",
     "analyze-video": "tsx skills/gemini-video-analyzer/scripts/analyze-video.ts",
+    "meta-ads": "tsx skills/meta-ad-library-scraper/scripts/meta-ads.ts",
+    "meta-ads:test": "tsx skills/meta-ad-library-scraper/scripts/meta-ads.ts self-test",
+    "meta-ads:analyze": "tsx skills/meta-ad-library-analyzer/scripts/analyze-meta-ads.ts",
+    "meta-ads:analyze:test": "tsx skills/meta-ad-library-analyzer/scripts/analyze-meta-ads.ts self-test",
     "google-ads": "tsx skills/google-ads-analyze/scripts/google-ads.ts",
     "google-ads:oauth": "tsx skills/google-ads-analyze/scripts/oauth-refresh-token.ts"
   },
   "dependencies": {
-    "@google/genai": "^1.32.0"
+    "@google/genai": "^1.32.0",
+    "playwright-core": "^1.60.0"
   },
   "devDependencies": {
     "@types/node": "^25.9.0",

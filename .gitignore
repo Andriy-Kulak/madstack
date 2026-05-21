@@ -15,6 +15,7 @@ media/
 outputs/
 analysis-output/
 generated/
+meta-files/
 *.mp4
 *.mov
 *.webm
