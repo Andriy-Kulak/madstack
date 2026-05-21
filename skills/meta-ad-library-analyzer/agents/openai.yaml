@@ -1,0 +1,7 @@
+interface:
+  display_name: "Meta Ad Library Analyzer"
+  short_description: "Analyze archived Meta ads into angle, hook, and strategy reports"
+  default_prompt: "Use meta-ad-library-analyzer to analyze this local Meta Ads archive and produce a marketer-ready report with ad angles, awareness stages, problem-solution, and reusable hook/script source material."
+
+policy:
+  allow_implicit_invocation: true

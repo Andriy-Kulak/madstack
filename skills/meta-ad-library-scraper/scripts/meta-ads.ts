@@ -95,12 +95,22 @@ type ScrapeResult = {
 
 type DownloadedAd = {
   ad_archive_id: string;
+  page_id: string | null;
+  page_name: string | null;
+  page_categories: string[];
+  page_like_count: number | null;
   title: string | null;
   body_text: string | null;
+  caption: string | null;
   cta_text: string | null;
+  cta_type: string | null;
+  link_description: string | null;
   link_url: string | null;
   ad_library_url: string;
   display_format: string | null;
+  publisher_platform: string[];
+  start_date: number | null;
+  end_date: number | null;
   video_file: string | null;
   image_file: string | null;
   preview_file: string | null;
@@ -854,12 +864,22 @@ async function downloadMediaFromScrape(input: ScrapeResult, sourceFile: string, 
 
     downloaded.push({
       ad_archive_id: ad.ad_archive_id,
+      page_id: ad.page_id,
+      page_name: ad.page_name,
+      page_categories: ad.page_categories,
+      page_like_count: ad.page_like_count,
       title: ad.title,
       body_text: ad.body_text,
+      caption: ad.caption,
       cta_text: ad.cta_text,
+      cta_type: ad.cta_type,
+      link_description: ad.link_description,
       link_url: ad.link_url,
       ad_library_url: ad.ad_library_url,
       display_format: ad.display_format,
+      publisher_platform: ad.publisher_platform,
+      start_date: ad.start_date,
+      end_date: ad.end_date,
       video_file: relativePath(root, videoFile),
       image_file: relativePath(root, imageFile),
       preview_file: relativePath(root, previewFile),
