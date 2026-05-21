@@ -6,6 +6,7 @@
   "description": "Marketing Ad & Growth Stack of Skills",
   "scripts": {
     "check": "tsx scripts/check.ts",
+    "doctor": "tsx scripts/doctor.ts",
     "typecheck": "tsc --noEmit",
     "analyze-video": "tsx skills/gemini-video-analyzer/scripts/analyze-video.ts",
     "meta-ads": "tsx skills/meta-ad-library-scraper/scripts/meta-ads.ts",

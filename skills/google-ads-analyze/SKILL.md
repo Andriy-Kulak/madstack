@@ -11,6 +11,8 @@ Use this skill when the user wants Google Ads data from the API, not screenshots
 
 Use local environment variables only. Never print, write into docs, commit, or ask the user to paste real credential values in chat.
 
+The helper scripts read `.env` and `.env.local` from the madstack repo root, plus exported shell env vars.
+
 Required:
 
 ```bash

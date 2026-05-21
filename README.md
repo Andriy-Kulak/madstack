@@ -46,6 +46,15 @@ Install both:
 
 Codex can also discover the repo-local skill links under `.agents/skills/`.
 
+For a staged new-user flow, see [ONBOARDING.md](ONBOARDING.md).
+
+Quick health checks:
+
+```bash
+npm run check
+npm run doctor
+```
+
 ## Secrets
 
 Copy `.env.example` to your local environment if you need one, but never commit `.env`.
@@ -65,6 +74,35 @@ GOOGLE_ADS_CUSTOMER_ID=
 ```
 
 Never put real API keys in `README.md`, `AGENTS.md`, `CLAUDE.md`, `SKILL.md`, scripts, examples, commits, issues, or chat transcripts.
+
+Installed skills are symlinks to this repo. Installing the skills does not make `.env.local` global; repo-local helper commands read `.env.local` when Codex runs them from the madstack repo root. Hosted or MCP-backed provider tools may need their own configuration.
+
+`fal-generate-video` normally uses the fal.ai MCP/tool integration. Configure fal credentials where that integration expects them, or export `FAL_KEY` in the environment that launches the tool; do not assume the fal MCP reads `madstack/.env.local`.
+
+## Onboarding Path
+
+Start new users with the lowest-friction workflow first:
+
+| Tier | Skills | Setup |
+|---|---|---|
+| No account credentials | `meta-ad-library-scraper` | `npm install`, Chrome/Chromium for browser fallback |
+| One API key | `gemini-video-analyzer`, `gemini-ad-video-analyzer` | `GEMINI_API_KEY` or `GOOGLE_API_KEY` |
+| Paid generation | `fal-generate-video` | Configured fal.ai MCP/tool integration, or `FAL_KEY` in that tool's environment |
+| Advanced OAuth | `google-ads-analyze` | Google Ads developer token, OAuth client, refresh token, customer IDs |
+
+Useful Codex starter prompts:
+
+```text
+What madstack skills are available, and which one should I use for video analysis?
+```
+
+```text
+Use madstack to analyze this video as a paid social ad: /path/to/video.mp4
+```
+
+```text
+Use madstack to scrape this public Meta Ads Library URL and create a local gallery.
+```
 
 ## Meta Ad Library Scraping
 

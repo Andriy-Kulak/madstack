@@ -13,6 +13,7 @@ Default to vertical `9:16` unless the user specifies a different aspect ratio. D
 
 - Use the configured fal.ai tool or local fal credentials.
 - Use `FAL_KEY` only as an env var name. Never write real keys into the skill or project files.
+- The fal.ai MCP/tool integration may not read `madstack/.env.local`; configure credentials where the integration expects them, or ensure `FAL_KEY` is exported in the environment that launches the tool.
 
 ## Workflow
 
