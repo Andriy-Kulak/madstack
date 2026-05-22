@@ -14,7 +14,9 @@
     "meta-ads:analyze": "tsx skills/meta-ad-library-analyzer/scripts/analyze-meta-ads.ts",
     "meta-ads:analyze:test": "tsx skills/meta-ad-library-analyzer/scripts/analyze-meta-ads.ts self-test",
     "google-ads": "tsx skills/google-ads-analyze/scripts/google-ads.ts",
-    "google-ads:oauth": "tsx skills/google-ads-analyze/scripts/oauth-refresh-token.ts"
+    "google-ads:oauth": "tsx skills/google-ads-analyze/scripts/oauth-refresh-token.ts",
+    "x-growth-radar": "tsx skills/x-growth-radar/scripts/x-growth-radar.ts",
+    "x-growth-radar:test": "tsx skills/x-growth-radar/scripts/x-growth-radar.ts self-test"
   },
   "dependencies": {
     "@google/genai": "^1.32.0",

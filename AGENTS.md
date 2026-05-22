@@ -20,12 +20,13 @@ madstack is a Marketing Ad & Growth Stack of Skills. Use it for ad creative anal
 | Generate or iterate on short social/ad videos with fal.ai | `fal-generate-video` |
 | Public Meta Ads Library URL scraping for ad IDs, copy, image/video URLs, formats, CTAs, and landing URLs | `meta-ad-library-scraper` |
 | Google Ads account, campaign, or performance analysis through the Google Ads API | `google-ads-analyze` |
+| X/Twitter discovery for growth marketing, AI ads, growth tech, emerging voices, or above-average attention posts | `x-growth-radar` |
 
 ## Secret Safety
 
 - Never write, print, commit, store, or log real API keys.
 - Never put keys in `README.md`, `AGENTS.md`, `CLAUDE.md`, `SKILL.md`, scripts, examples, commits, issues, or chat.
-- Only refer to env var names such as `GEMINI_API_KEY`, `GOOGLE_API_KEY`, `FAL_KEY`, `GOOGLE_ADS_DEVELOPER_TOKEN`, `GOOGLE_ADS_CLIENT_ID`, `GOOGLE_ADS_CLIENT_SECRET`, `GOOGLE_ADS_REFRESH_TOKEN`, `GOOGLE_ADS_LOGIN_CUSTOMER_ID`, and `GOOGLE_ADS_CUSTOMER_ID`.
+- Only refer to env var names such as `GEMINI_API_KEY`, `GOOGLE_API_KEY`, `FAL_KEY`, `XAI_API_KEY`, `GOOGLE_ADS_DEVELOPER_TOKEN`, `GOOGLE_ADS_CLIENT_ID`, `GOOGLE_ADS_CLIENT_SECRET`, `GOOGLE_ADS_REFRESH_TOKEN`, `GOOGLE_ADS_LOGIN_CUSTOMER_ID`, and `GOOGLE_ADS_CUSTOMER_ID`.
 - If a required key is missing, ask the user to configure it locally. Do not ask them to paste the raw key into chat.
 - Do not commit `.env`, `.env.*`, local media, generated video files, or analysis outputs.
 
