@@ -86,8 +86,14 @@ export function loadEnv(root = process.cwd()): Env {
   };
 }
 
+function cleanApiKey(value: string | undefined): string | undefined {
+  const key = value?.trim();
+  if (!key || key === "REPLACE_ME_WITH_YOUR_GEMINI_API_KEY" || key === "your-api-key-here") return undefined;
+  return key;
+}
+
 export function resolveGeminiApiKey(env: Env = process.env): string | undefined {
-  return env.GEMINI_API_KEY?.trim() || env.GOOGLE_API_KEY?.trim() || undefined;
+  return cleanApiKey(env.GEMINI_API_KEY) || cleanApiKey(env.GOOGLE_API_KEY);
 }
 
 export function isYouTubeUrl(input: string): boolean {
