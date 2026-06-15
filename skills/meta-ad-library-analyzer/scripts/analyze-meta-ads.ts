@@ -165,6 +165,27 @@ const imageMimeByExt: Record<string, string> = {
   ".gif": "image/gif",
 };
 
+function sniffMimeType(filePath: string, knownByExt: Record<string, string>, mediaType: "video" | "image"): string | null {
+  const ext = path.extname(filePath).toLowerCase();
+  const mimeType = knownByExt[ext];
+  if (mimeType) return mimeType;
+
+  const header = readFileSync(filePath).subarray(0, 16);
+  const ascii = header.toString("ascii");
+  if (mediaType === "video") {
+    if (ascii.slice(4, 8) === "ftyp") return "video/mp4";
+    if (header[0] === 0x1a && header[1] === 0x45 && header[2] === 0xdf && header[3] === 0xa3) return "video/webm";
+    if (ascii.slice(0, 4) === "RIFF" && ascii.slice(8, 12) === "AVI ") return "video/x-msvideo";
+  } else {
+    if (header[0] === 0xff && header[1] === 0xd8 && header[2] === 0xff) return "image/jpeg";
+    if (header[0] === 0x89 && ascii.slice(1, 4) === "PNG") return "image/png";
+    if (ascii.slice(0, 4) === "RIFF" && ascii.slice(8, 12) === "WEBP") return "image/webp";
+    if (ascii.slice(0, 3) === "GIF") return "image/gif";
+  }
+
+  return null;
+}
+
 function usage(exitCode = 1): never {
   const stream = exitCode === 0 ? process.stdout : process.stderr;
   stream.write(`Usage:
@@ -449,7 +470,7 @@ ${JSON.stringify(compact, null, 2)}`;
 async function mediaPart(ai: GoogleGenAI, filePath: string, mediaType: AdAnalysis["media_type"], fps: number | null): Promise<unknown> {
   const ext = path.extname(filePath).toLowerCase();
   if (mediaType === "video") {
-    const mimeType = videoMimeByExt[ext];
+    const mimeType = sniffMimeType(filePath, videoMimeByExt, "video");
     if (!mimeType) throw new Error(`Unsupported video extension: ${ext}`);
     let file = await ai.files.upload({ file: filePath, config: { mimeType } });
     while (!file.state || file.state.toString() !== "ACTIVE") {
@@ -464,7 +485,7 @@ async function mediaPart(ai: GoogleGenAI, filePath: string, mediaType: AdAnalysi
     return part;
   }
 
-  const mimeType = imageMimeByExt[ext];
+  const mimeType = sniffMimeType(filePath, imageMimeByExt, "image");
   if (!mimeType) throw new Error(`Unsupported image extension: ${ext}`);
   return {
     inlineData: {
