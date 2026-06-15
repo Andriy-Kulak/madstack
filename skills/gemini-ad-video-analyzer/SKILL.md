@@ -9,31 +9,37 @@ Use this skill when the user gives a video and wants an ad-specific creative tea
 
 ## Requirements
 
-- Use `GEMINI_API_KEY` or `GOOGLE_API_KEY`; never write API keys into the skill or project files.
-- Use the shared helper from `gemini-video-analyzer` in ad mode.
-- If dependencies are missing, ask the user to run `npm install` in the madstack repo.
-- The helper reads `.env` and `.env.local` from the madstack repo root, plus exported shell env vars.
+- Prefer the local MCP server named `gemini-video-analyzer`.
+- The MCP server must expose these tools: `check_video_analyzer_config`, `analyze_video`, and `list_supported_video_extensions`.
+- The Gemini API key belongs in the MCP server configuration, not in the skill, prompt, repo files, or chat.
+- Never write, print, commit, store, or log real API keys.
+- Do not use the bundled TypeScript helper unless the user explicitly asks for a non-MCP fallback.
 
-From the madstack repo:
+If the `gemini-video-analyzer` MCP server is not available in the active tool list, tell the user:
+
+```text
+The gemini-video-analyzer MCP server is not available in this Codex session. Please add or enable the MCP server, configure GEMINI_API_KEY or GOOGLE_API_KEY in the MCP server's environment, then restart or reload Codex.
+```
+
+If `check_video_analyzer_config` reports that the key is missing, tell the user:
+
+```text
+The gemini-video-analyzer MCP server is installed, but its Gemini API key is not configured. Add GEMINI_API_KEY or GOOGLE_API_KEY to the MCP server's environment variables.
+```
+
+The repo still includes a CLI helper for manual debugging:
 
 ```bash
 npm run analyze-video -- /path/to/video.mp4 --mode ad
 ```
 
-For public YouTube videos:
-
-```bash
-npm run analyze-video -- "https://www.youtube.com/watch?v=..." --mode ad
-```
-
-Run helper commands from the madstack repo root so npm can find the project dependencies.
-
 ## Workflow
 
 1. Confirm the provided path or URL is a supported video input.
-2. Run the helper with `--mode ad`, adding `--fps 2` for fast-cut ads or tiny text.
-3. If the user asks for a particular lens, add `--prompt`, but keep the output ad-specific.
-4. Return Gemini's analysis, lightly cleaning formatting if needed, without inventing details not present in the output.
+2. Call `check_video_analyzer_config` first when practical. If it reports missing configuration, stop and ask the user to configure the MCP server.
+3. Call `analyze_video` with `mode: "ad"`, adding `fps: 2` for fast-cut ads or tiny text.
+4. If the user asks for a particular lens, pass it as `prompt`, but keep the output ad-specific.
+5. Return the MCP analysis, lightly cleaning formatting if needed, without inventing details not present in the output.
 
 ## Accuracy Rules
 
@@ -68,5 +74,6 @@ Include timestamps whenever Gemini provides or can infer them. In the audio sect
 - `--prompt "..."`: custom ad-analysis lens or output format.
 - `--fps 2`: higher frame sampling for fast edits or small on-screen text.
 - `--start 12s --end 45s`: analyze only a segment.
-- `--save analysis.md`: save the result to a file.
 - `--model gemini-2.5-flash`: fallback if the default preview model is unavailable.
+
+When using MCP, pass these as tool arguments: `mode`, `prompt`, `model`, `fps`, `start`, and `end`.
