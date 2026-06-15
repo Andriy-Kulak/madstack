@@ -1,0 +1,7 @@
+interface:
+  display_name: "X Growth Radar"
+  short_description: "Find growth and AI ads signals on X"
+  default_prompt: "Use $x-growth-radar to find interesting X posts and emerging voices about growth marketing and AI ads."
+
+policy:
+  allow_implicit_invocation: true

@@ -15,6 +15,7 @@ The repo starts Codex-first and stays compatible with Claude Code. `AGENTS.md` i
 | `fal-generate-video` | fal.ai | Text-to-video, image-to-video, reference-to-video ad/social clips |
 | `meta-ad-library-scraper` | Meta Ad Library | Public ad IDs, copy, formats, image/video URLs, CTAs, landing URLs |
 | `google-ads-analyze` | Google Ads API | Account, campaign, and performance analysis from Google Ads API data |
+| `x-growth-radar` | xAI X Search | Interesting growth/AI ads posts, emerging voices, and daily radar reports |
 
 ## Install
 
@@ -65,6 +66,7 @@ The skills only document env var names:
 GEMINI_API_KEY=
 GOOGLE_API_KEY=
 FAL_KEY=
+XAI_API_KEY=
 GOOGLE_ADS_DEVELOPER_TOKEN=
 GOOGLE_ADS_CLIENT_ID=
 GOOGLE_ADS_CLIENT_SECRET=
@@ -87,6 +89,7 @@ Start new users with the lowest-friction workflow first:
 |---|---|---|
 | No account credentials | `meta-ad-library-scraper` | `npm install`, Chrome/Chromium for browser fallback |
 | One API key | `gemini-video-analyzer`, `gemini-ad-video-analyzer` | `GEMINI_API_KEY` or `GOOGLE_API_KEY` |
+| One X/search API key | `x-growth-radar` | `XAI_API_KEY` |
 | Paid generation | `fal-generate-video` | Configured fal.ai MCP/tool integration, or `FAL_KEY` in that tool's environment |
 | Advanced OAuth | `google-ads-analyze` | Google Ads developer token, OAuth client, refresh token, customer IDs |
 
@@ -102,6 +105,32 @@ Use madstack to analyze this video as a paid social ad: /path/to/video.mp4
 
 ```text
 Use madstack to scrape this public Meta Ads Library URL and create a local gallery.
+```
+
+```text
+Use madstack to find interesting X posts and emerging voices about growth marketing and AI ads.
+```
+
+## X Growth Radar
+
+Use `x-growth-radar` for a daily X report about growth marketing, AI ads, creative automation, and emerging growth-tech voices. It calls the xAI Responses API with the X Search tool and keeps the tunable parameters visible in every report.
+
+Run the default seed search:
+
+```bash
+npm run x-growth-radar -- daily --seed rileybrown
+```
+
+Adjust the quality bar:
+
+```bash
+npm run x-growth-radar -- daily --seed rileybrown --days 14 --min-likes 100 --above-average-multiple 2
+```
+
+Write Markdown and JSON report files:
+
+```bash
+npm run x-growth-radar -- daily --seed rileybrown --out outputs/x-growth-radar
 ```
 
 ## Meta Ad Library Scraping
