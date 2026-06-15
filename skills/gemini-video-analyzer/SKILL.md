@@ -9,31 +9,37 @@ Use this skill when the user gives a video and wants Gemini to inspect the actua
 
 ## Requirements
 
-- Use `GEMINI_API_KEY` or `GOOGLE_API_KEY`; never write API keys into the skill or project files.
-- Prefer the bundled TypeScript helper so the upload and Gemini request are reproducible.
-- If dependencies are missing, ask the user to run `npm install` in the madstack repo.
-- The helper reads `.env` and `.env.local` from the madstack repo root, plus exported shell env vars.
+- Prefer the local MCP server named `gemini-video-analyzer`.
+- The MCP server must expose these tools: `check_video_analyzer_config`, `analyze_video`, and `list_supported_video_extensions`.
+- The Gemini API key belongs in the MCP server configuration, not in the skill, prompt, repo files, or chat.
+- Never write, print, commit, store, or log real API keys.
+- Do not use the bundled TypeScript helper unless the user explicitly asks for a non-MCP fallback.
 
-From the madstack repo:
+If the `gemini-video-analyzer` MCP server is not available in the active tool list, tell the user:
+
+```text
+The gemini-video-analyzer MCP server is not available in this Codex session. Please add or enable the MCP server, configure GEMINI_API_KEY or GOOGLE_API_KEY in the MCP server's environment, then restart or reload Codex.
+```
+
+If `check_video_analyzer_config` reports that the key is missing, tell the user:
+
+```text
+The gemini-video-analyzer MCP server is installed, but its Gemini API key is not configured. Add GEMINI_API_KEY or GOOGLE_API_KEY to the MCP server's environment variables.
+```
+
+The repo still includes a CLI helper for manual debugging:
 
 ```bash
 npm run analyze-video -- /path/to/video.mp4 --mode general
 ```
 
-For public YouTube videos:
-
-```bash
-npm run analyze-video -- "https://www.youtube.com/watch?v=..." --mode general
-```
-
-Run helper commands from the madstack repo root so npm can find the project dependencies.
-
 ## Workflow
 
 1. Confirm the provided path or URL is a supported video input.
-2. Run the helper with `--mode general` unless the user explicitly asks for an ad creative teardown.
-3. If the user gives a specific analysis instruction, use `--prompt`, for example `--prompt "Give me a second-by-second breakdown of what happens."`
-4. Return Gemini's analysis, lightly cleaning formatting if needed, without inventing details not present in the output.
+2. Call `check_video_analyzer_config` first when practical. If it reports missing configuration, stop and ask the user to configure the MCP server.
+3. Call `analyze_video` with `mode: "general"` unless the user explicitly asks for an ad creative teardown.
+4. If the user gives a specific analysis instruction, pass it as `prompt`, for example `Give me a second-by-second breakdown of what happens.`
+5. Return the MCP analysis, lightly cleaning formatting if needed, without inventing details not present in the output.
 
 ## Accuracy Rules
 
@@ -52,7 +58,8 @@ Run helper commands from the madstack repo root so npm can find the project depe
 - `--model gemini-3-flash-preview`: default model.
 - `--fps 2`: higher frame sampling for fast edits or small on-screen text.
 - `--start 12s --end 45s`: clip analysis to a segment.
-- `--save analysis.md`: save the result to a file.
+
+When using MCP, pass these as tool arguments: `mode`, `prompt`, `model`, `fps`, `start`, and `end`.
 
 ## General Output Defaults
 

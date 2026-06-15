@@ -8,5 +8,5 @@
     "noEmit": true,
     "types": ["node"]
   },
-  "include": ["scripts/**/*.ts", "skills/**/*.ts"]
+  "include": ["mcp/**/*.ts", "scripts/**/*.ts", "skills/**/*.ts", "src/**/*.ts"]
 }
