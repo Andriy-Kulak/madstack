@@ -81,6 +81,52 @@ Installed skills are symlinks to this repo. Installing the skills does not make 
 
 `fal-generate-video` normally uses the fal.ai MCP/tool integration. Configure fal credentials where that integration expects them, or export `FAL_KEY` in the environment that launches the tool; do not assume the fal MCP reads `madstack/.env.local`.
 
+## Video Analyzer MCP
+
+madstack includes a local MCP server for Gemini-backed video analysis. This lets agents call a typed MCP tool instead of knowing how to run the helper script or where local `.env` files live.
+
+Install or update the repo:
+
+```bash
+git clone https://github.com/Andriy-Kulak/madstack.git /path/to/madstack
+cd /path/to/madstack
+npm install
+```
+
+Add the MCP server to your client config. Put the API key in the MCP server `env` block; do not commit it to this repo or paste it into chat.
+
+```json
+{
+  "mcpServers": {
+    "madstack-video-analyzer": {
+      "command": "/path/to/madstack/node_modules/.bin/tsx",
+      "args": ["/path/to/madstack/mcp/video-analyzer-server.ts"],
+      "env": {
+        "GEMINI_API_KEY": "your-api-key-here"
+      }
+    }
+  }
+}
+```
+
+Use `GOOGLE_API_KEY` instead of `GEMINI_API_KEY` if that is how your Gemini key is named.
+
+The MCP server exposes:
+
+| Tool | Purpose |
+|---|---|
+| `analyze_video` | Analyze a local video file or public YouTube URL with Gemini |
+| `check_video_analyzer_config` | Confirm the server has a Gemini key without revealing it |
+| `list_supported_video_extensions` | Show accepted local video extensions |
+
+Local smoke test:
+
+```bash
+npm run mcp:video-analyzer:smoke
+```
+
+The smoke test starts the MCP server, lists its tools, and verifies the config check does not leak the placeholder key. It does not call Gemini or upload video.
+
 ## Onboarding Path
 
 Start new users with the lowest-friction workflow first:
